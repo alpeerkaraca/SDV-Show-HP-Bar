@@ -6,7 +6,7 @@ This mod has been created to display enemies health bars when playing to stardew
 
 The indicator will only display the health of enemies depending on the number of them have killed and your combat level.
 
-![Screenshot](https://github.com/SDV-SHOW-HP-BAR\ShowMobHealthBars\images\Screenshot-1.jpg)
+![Screenshot](https://github.com/alpeerkaraca/SDV-Show-HP-Bar/blob/main/ShowMobHealthBars/images/Screenshot-1.jpg)
 
 ## Installing
 Please ensure first that you have installed [SMAPI](https://www.smapi.io/).
