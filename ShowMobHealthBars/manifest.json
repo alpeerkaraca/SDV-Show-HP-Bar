@@ -1,0 +1,10 @@
+﻿{
+  "Author": "alpeerkaraca",
+  "Description": "Mod that display health bars above enemies",
+  "EntryDll": "ShowMobHealthBars.dll",
+  "MinimumApiVersion": "4.0.0",
+  "MinimumGameVersion": "1.6.4",
+  "Name": "Mob Health Bars",
+  "UniqueID": "alpeerkaraca.ShowMobHealthBars",
+  "Version": "0.1.0"
+}

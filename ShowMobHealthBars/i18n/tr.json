@@ -1,0 +1,13 @@
+﻿{
+  "ehb.config.enableXPNeeded.title": "Deneyim Gereksinimini Etkinleştir.",
+  "ehb.config.enableXPNeeded.desc": "Etkinleştirildiğinde canavar can barını görmek için bir miktar yaratık kesmelisin. Her canavar farklı hesaplanır.",
+
+  "ehb.config.hideTextInfo.title": "Sayıları Gizle",
+  "ehb.config.hideTextInfo.desc": "Etkinleştirildiğinde, can değeri gizlenir (örn. 105/120)",
+
+  "ehb.config.hideFullLifeBar.title": "Can Doluysa Can Barını Kapat.",
+  "ehb.config.hideFullLifeBar.desc": "Etkinleştirildiğinde, yaratığın canı doluysa bar gizlenir. (can barı gizli yaratıkları açığa çıkarabilir, bu seçenek bunu engellemeni sağlar)",
+
+  "ehb.config.colorScheme.title": "Renk Şeması Seç",
+  "ehb.config.colorScheme.desc": "Farklı bir renk şeması seçmene olanak sağlar."
+}
