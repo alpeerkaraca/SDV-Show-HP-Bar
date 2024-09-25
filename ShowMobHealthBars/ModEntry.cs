@@ -180,7 +180,7 @@ namespace Thor.Stardew.Mods.HealthBars
 
                 // If monster has already been killed once by player, we get the number of kills, else it's 0
                 int monsterKilledAmount = Game1.stats.specificMonstersKilled.GetValueOrDefault(monster.Name, 0);
-                String healthText = "???";
+                string healthText = "???";
 
                 // By default, color bar is grey
                 Color barColor = Color.DarkSlateGray;
