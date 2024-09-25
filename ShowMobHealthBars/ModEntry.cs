@@ -6,6 +6,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Monsters;
 using System;
+using System.Collections.Generic;
 
 namespace Thor.Stardew.Mods.HealthBars
 {
@@ -146,7 +147,7 @@ namespace Thor.Stardew.Mods.HealthBars
                 }
                 Monster monster = (Monster)character;
                 // If monster is not visible, next
-                if (monster.isInvisible.Value || !Utility.isOnScreen(monster.position.Value, 3 * Game1.tileSize))
+                if (monster.IsInvisible || !Utility.isOnScreen(monster.position.Value, 3 * Game1.tileSize))
                 {
                     continue;
                 }
@@ -158,7 +159,7 @@ namespace Thor.Stardew.Mods.HealthBars
                 }
                 else if (monster is RockGolem)
                 {
-                    if (monster.health.Value == monster.maxHealth.Value) continue;
+                    if (monster.Health == monster.MaxHealth) continue;
                 }
                 else if (monster is Bug)
                 {
@@ -176,8 +177,9 @@ namespace Thor.Stardew.Mods.HealthBars
                 if (health > maxHealth) maxHealth = health;
                 if (_config.HideFullLifeBar && maxHealth == health) continue;
 
+
                 // If monster has already been killed once by player, we get the number of kills, else it's 0
-                int monsterKilledAmount = Game1.stats.specificMonstersKilled.ContainsKey(monster.name.Value) ? Game1.stats.specificMonstersKilled[monster.name.Value] : 0;
+                int monsterKilledAmount = Game1.stats.specificMonstersKilled.GetValueOrDefault(monster.Name, 0);
                 String healthText = "???";
 
                 // By default, color bar is grey
@@ -211,7 +213,7 @@ namespace Thor.Stardew.Mods.HealthBars
                     {
                         barLengthPercent = monsterHealthPercent;
                         // If it's a very strong monster, we hide the life counter
-                        if (_config.EnableXPNeeded && monster.health.Value > 999)
+                        if (_config.EnableXPNeeded && monster.Health > 999)
                         {
                             healthText = "!!!";
                         }
