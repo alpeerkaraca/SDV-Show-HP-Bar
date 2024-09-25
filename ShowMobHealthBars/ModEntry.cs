@@ -152,22 +152,14 @@ namespace Thor.Stardew.Mods.HealthBars
                     continue;
                 }
 
-                // Check if the current monster should not display life bar
-                if (monster is RockCrab)
+                switch (monster)
                 {
-                    if (monster.Sprite.CurrentFrame % 4 == 0) continue;
-                }
-                else if (monster is RockGolem)
-                {
-                    if (monster.Health == monster.MaxHealth) continue;
-                }
-                else if (monster is Bug)
-                {
-                    if (((Bug)monster).isArmoredBug.Value) continue;
-                }
-                else if (monster is Grub)
-                {
-                    if (monster.Sprite.CurrentFrame == 19) continue;
+                    // Check if the current monster should not display life bar
+                    case RockCrab when monster.Sprite.CurrentFrame % 4 == 0:
+                    case RockGolem when monster.Health == monster.MaxHealth:
+                    case Bug bug when bug.isArmoredBug.Value:
+                    case Grub when monster.Sprite.CurrentFrame == 19:
+                        continue;
                 }
 
 
