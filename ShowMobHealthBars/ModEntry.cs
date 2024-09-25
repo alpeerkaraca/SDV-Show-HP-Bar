@@ -216,6 +216,7 @@ namespace Thor.Stardew.Mods.HealthBars
                         {
                             healthText = $"{health:000}";
                             textProps.Font = Game1.tinyFont;
+                            textProps.Color = Color.DarkSlateGray;
                             textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
                             textProps.BottomOffset = Globals.TEXT_DEFAUT_OFFSET;
                         }
@@ -271,8 +272,6 @@ namespace Thor.Stardew.Mods.HealthBars
                         0f);
                 }
 
-                // Display life count
-                Color textColor = (barColor == Color.DarkSlateGray || barLengthPercent < 0.35f) ? Color.AntiqueWhite : Color.DarkSlateGray;
                 // Draw text
                 if (!_config.HideTextInfo)
                 {
