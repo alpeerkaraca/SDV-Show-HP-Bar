@@ -153,7 +153,7 @@ namespace Thor.Stardew.Mods.HealthBars
                 }
 
                 // Check if the current monster should not display life bar
-                if (monster is RockCrab || monster is RockCrab)
+                if (monster is RockCrab)
                 {
                     if (monster.Sprite.CurrentFrame % 4 == 0) continue;
                 }
