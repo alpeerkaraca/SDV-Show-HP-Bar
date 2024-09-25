@@ -1,14 +1,14 @@
-﻿using GenericModConfigMenu;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ShowMobHealthBars.GenericModConfigMenu;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Monsters;
-using System;
-using System.Collections.Generic;
 
-namespace Thor.Stardew.Mods.HealthBars
+namespace ShowMobHealthBars
 {
     /// <summary>
     /// Main class of the mod

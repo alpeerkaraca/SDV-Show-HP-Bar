@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Thor.Stardew.Mods.HealthBars
+namespace ShowMobHealthBars
 {
     /// <summary>
     /// Properties of the life text display

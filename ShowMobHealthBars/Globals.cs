@@ -1,4 +1,4 @@
-﻿namespace Thor.Stardew.Mods.HealthBars
+﻿namespace ShowMobHealthBars
 {
     /// <summary>
     /// Globals constants class
