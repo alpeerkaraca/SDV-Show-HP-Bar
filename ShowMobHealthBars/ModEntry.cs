@@ -141,11 +141,11 @@ namespace Thor.Stardew.Mods.HealthBars
             foreach (NPC character in Game1.currentLocation.characters)
             {
                 // We only care about monsters
-                if (!(character is Monster))
+                if (character is not Monster monster)
                 {
                     continue;
                 }
-                Monster monster = (Monster)character;
+
                 // If monster is not visible, next
                 if (monster.IsInvisible || !Utility.isOnScreen(monster.position.Value, 3 * Game1.tileSize))
                 {
