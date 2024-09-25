@@ -35,18 +35,18 @@ namespace Thor.Stardew.Mods.HealthBars
         /// </summary>
         private static readonly Color[][] ColourSchemes =
         {
-            new Color[] { Color.LawnGreen, Color.YellowGreen, Color.Gold, Color.DarkOrange, Color.Crimson },
-            new Color[] { Color.Crimson, Color.DarkOrange, Color.Gold, Color.YellowGreen, Color.LawnGreen },
-            new Color[] { Color.CornflowerBlue, Color.RoyalBlue, Color.Blue, Color.DarkBlue, Color.MidnightBlue },
-            new Color[] { Color.MidnightBlue, Color.DarkBlue, Color.Blue, Color.RoyalBlue, Color.CornflowerBlue },
-            new Color[] { Color.DarkViolet, Color.MediumOrchid, Color.Orchid, Color.MediumPurple, Color.BlueViolet },
-            new Color[] { Color.White, Color.MediumPurple, Color.Orchid, Color.MediumOrchid, Color.DarkViolet }
+            new[] { Color.LawnGreen, Color.YellowGreen, Color.Gold, Color.DarkOrange, Color.Crimson },
+            new[] { Color.Crimson, Color.DarkOrange, Color.Gold, Color.YellowGreen, Color.LawnGreen },
+            new[] { Color.CornflowerBlue, Color.RoyalBlue, Color.Blue, Color.DarkBlue, Color.MidnightBlue },
+            new[] { Color.MidnightBlue, Color.DarkBlue, Color.Blue, Color.RoyalBlue, Color.CornflowerBlue },
+            new[] { Color.DarkViolet, Color.MediumOrchid, Color.Orchid, Color.MediumPurple, Color.BlueViolet },
+            new[] { Color.White, Color.MediumPurple, Color.Orchid, Color.MediumOrchid, Color.DarkViolet }
         };
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // get Generic Mod Config Menu's API (if it's installed)
-            var configMenu = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
+            IGenericModConfigMenuApi configMenu = Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
             if (configMenu is null)
                 return;
 
@@ -134,7 +134,7 @@ namespace Thor.Stardew.Mods.HealthBars
             if (_whitePixel == null)
             {
                 _whitePixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
-                _whitePixel.SetData(new Color[] { Color.White });
+                _whitePixel.SetData(new[] { Color.White });
             }
 
             // Iterate through all NPC
@@ -179,7 +179,7 @@ namespace Thor.Stardew.Mods.HealthBars
                 // By default, color bar full
                 float barLengthPercent = 1f;
 
-                TextProps textProps = new TextProps()
+                TextProps textProps = new()
                 {
                     Font = Game1.smallFont,
                     Color = Color.Ivory,
@@ -224,7 +224,7 @@ namespace Thor.Stardew.Mods.HealthBars
 
                 // Display the life bar
                 Vector2 monsterLocalPosition = monster.getLocalPosition(Game1.viewport);
-                Vector2 lifebarCenterPos = new Vector2(monsterLocalPosition.X + (float)monster.Sprite.SpriteWidth * Game1.pixelZoom / 2, (float)monsterLocalPosition.Y - ((float)monster.Sprite.SpriteHeight + 5) * Game1.pixelZoom / 2);
+                Vector2 lifebarCenterPos = new(monsterLocalPosition.X + (float)monster.Sprite.SpriteWidth * Game1.pixelZoom / 2, (float)monsterLocalPosition.Y - ((float)monster.Sprite.SpriteHeight + 5) * Game1.pixelZoom / 2);
 
                 // If we use alternate sprite (do not show life level)
                 if (useAlternateSprite)
@@ -256,8 +256,8 @@ namespace Thor.Stardew.Mods.HealthBars
                         0f);
 
                     //Calculate size of the lifebox
-                    Rectangle lifeBox = new Rectangle(0, 0, (int)((lifebarBorder.Width - Globals.LIFEBAR_MARGINS * 2) * barLengthPercent), Globals.SPRITE_HEIGHT - Globals.LIFEBAR_MARGINS * 2);
-                    Vector2 internalLifebarPos = new Vector2(lifebarCenterPos.X - lifebarBorder.Width / 2f + Globals.LIFEBAR_MARGINS, lifebarCenterPos.Y);
+                    Rectangle lifeBox = new(0, 0, (int)((lifebarBorder.Width - Globals.LIFEBAR_MARGINS * 2) * barLengthPercent), Globals.SPRITE_HEIGHT - Globals.LIFEBAR_MARGINS * 2);
+                    Vector2 internalLifebarPos = new(lifebarCenterPos.X - lifebarBorder.Width / 2f + Globals.LIFEBAR_MARGINS, lifebarCenterPos.Y);
                     //Display life bar
                     Game1.spriteBatch.Draw(
                         _whitePixel,
