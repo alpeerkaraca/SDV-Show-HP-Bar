@@ -194,11 +194,14 @@ namespace Thor.Stardew.Mods.HealthBars
                 {
                     useAlternateSprite = false;
                     float monsterHealthPercent = (float)health / (float)maxHealth;
-                    if (monsterHealthPercent > 0.9f) barColor = ColourSchemes[_config.ColorScheme][0];
-                    else if (monsterHealthPercent > 0.65f) barColor = ColourSchemes[_config.ColorScheme][1];
-                    else if (monsterHealthPercent > 0.35f) barColor = ColourSchemes[_config.ColorScheme][2];
-                    else if (monsterHealthPercent > 0.15f) barColor = ColourSchemes[_config.ColorScheme][3];
-                    else barColor = ColourSchemes[_config.ColorScheme][4];
+                    barColor = monsterHealthPercent switch
+                    {
+                        > 0.9f => ColourSchemes[_config.ColorScheme][0],
+                        > 0.65f => ColourSchemes[_config.ColorScheme][1],
+                        > 0.35f => ColourSchemes[_config.ColorScheme][2],
+                        > 0.15f => ColourSchemes[_config.ColorScheme][3],
+                        _ => ColourSchemes[_config.ColorScheme][4]
+                    };
 
                     // If level system is deactivated or the full level is OK, we display the stats
                     if (!_config.EnableXPNeeded || monsterKilledAmount + Game1.player.combatLevel.Value * 4 > Globals.EXPERIENCE_FULL_STATS_LEVEL)
