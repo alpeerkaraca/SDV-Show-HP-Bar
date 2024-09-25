@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ShowMobHealthBars;
+namespace ShowMobHealthBars.Core;
 
 /// <summary>
 /// Properties of the life text display

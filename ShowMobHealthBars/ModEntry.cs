@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ShowMobHealthBars.Core;
 using ShowMobHealthBars.GenericModConfigMenu;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -33,15 +35,54 @@ public sealed class ModEntry : Mod
     /// <summary>
     /// Available colour schemes of the life bar
     /// </summary>
-    private static readonly Color[][] ColourSchemes =
+    private static readonly ColorScheme[] ColorSchemes =
     {
-        new[] { Color.LawnGreen, Color.YellowGreen, Color.Gold, Color.DarkOrange, Color.Crimson },
-        new[] { Color.Crimson, Color.DarkOrange, Color.Gold, Color.YellowGreen, Color.LawnGreen },
-        new[] { Color.CornflowerBlue, Color.RoyalBlue, Color.Blue, Color.DarkBlue, Color.MidnightBlue },
-        new[] { Color.MidnightBlue, Color.DarkBlue, Color.Blue, Color.RoyalBlue, Color.CornflowerBlue },
-        new[] { Color.DarkViolet, Color.MediumOrchid, Color.Orchid, Color.MediumPurple, Color.BlueViolet },
-        new[] { Color.White, Color.MediumPurple, Color.Orchid, Color.MediumOrchid, Color.DarkViolet }
+        new("Classic",
+            new StageColors(Color.LawnGreen, Color.DarkSlateGray),
+            new StageColors(Color.YellowGreen, Color.DarkSlateGray),
+            new StageColors(Color.Gold, Color.DarkSlateGray),
+            new StageColors(Color.DarkOrange, Color.DarkSlateGray),
+            new StageColors(Color.Crimson, Color.DarkSlateGray)
+        ),
+        new("Classic (inverted)",
+            new StageColors(Color.Crimson, Color.Ivory),
+            new StageColors(Color.DarkOrange, Color.Ivory),
+            new StageColors(Color.Gold, Color.DarkSlateGray),
+            new StageColors(Color.YellowGreen, Color.DarkSlateGray),
+            new StageColors(Color.LawnGreen, Color.DarkSlateGray)
+        ),
+        new("Midnight",
+            new StageColors(Color.CornflowerBlue, Color.DarkSlateGray),
+            new StageColors(Color.RoyalBlue, Color.Ivory),
+            new StageColors(Color.Blue, Color.Ivory),
+            new StageColors(Color.DarkBlue, Color.DarkSlateGray),
+            new StageColors(Color.MidnightBlue, Color.DarkSlateGray)
+        ),
+        new("Midnight (inverted)",
+            new StageColors(Color.MidnightBlue, Color.Ivory),
+            new StageColors(Color.DarkBlue, Color.Ivory),
+            new StageColors(Color.Blue, Color.Ivory),
+            new StageColors(Color.RoyalBlue, Color.DarkSlateGray),
+            new StageColors(Color.CornflowerBlue, Color.DarkSlateGray)
+        ),
+        new("Rasmodius",
+            new StageColors(Color.DarkViolet, Color.Ivory),
+            new StageColors(Color.MediumOrchid, Color.DarkSlateGray),
+            new StageColors(Color.Orchid, Color.DarkSlateGray),
+            new StageColors(Color.MediumPurple, Color.DarkSlateGray),
+            new StageColors(Color.BlueViolet, Color.DarkSlateGray)
+        ),
+        new("Rasmodius (inverted)",
+            new StageColors(Color.BlueViolet, Color.Ivory),
+            new StageColors(Color.MediumPurple, Color.Ivory),
+            new StageColors(Color.Orchid, Color.DarkSlateGray),
+            new StageColors(Color.MediumOrchid, Color.DarkSlateGray),
+            new StageColors(Color.DarkViolet, Color.DarkSlateGray)
+        ),
     };
+
+    private static ColorScheme GetColorSchemeOrDefault(int colorScheme)
+        => ColorSchemes.ElementAtOrDefault(colorScheme) ?? ColorSchemes.First();
 
     private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
     {
@@ -77,15 +118,17 @@ public sealed class ModEntry : Mod
             getValue: () => _config.HideFullLifeBar,
             setValue: value => _config.HideFullLifeBar = value
         );
-        configMenu.AddNumberOption(
+        configMenu.AddTextOption(
             mod: ModManifest,
             name: () => Helper.Translation.Get("ehb.config.colorScheme.title"),
             tooltip: () => Helper.Translation.Get("ehb.config.colorScheme.desc"),
-            min: 0,
-            max: ColourSchemes.Length - 1,
-            interval: 1f,
-            getValue: () => _config.ColorScheme,
-            setValue: value => _config.ColorScheme = Convert.ToInt32(value)
+            allowedValues: ColorSchemes.Select(colorScheme => colorScheme.Name).ToArray(),
+            getValue: () => GetColorSchemeOrDefault(_config.ColorScheme).Name,
+            setValue: value =>
+            {
+                int index = Array.FindIndex(ColorSchemes, colorScheme => colorScheme.Name == value);
+                _config.ColorScheme = Math.Max(index, 0);
+            }
         );
     }
 
@@ -109,7 +152,7 @@ public sealed class ModEntry : Mod
     private void EnsureCorrectConfig()
     {
         bool needUpdateConfig = false;
-        if (_config.ColorScheme >= ColourSchemes.Length || _config.ColorScheme < 0)
+        if (_config.ColorScheme >= ColorSchemes.Length || _config.ColorScheme < 0)
         {
             _config.ColorScheme = 0;
             needUpdateConfig = true;
@@ -174,9 +217,7 @@ public sealed class ModEntry : Mod
             int monsterKilledAmount = Game1.stats.specificMonstersKilled.GetValueOrDefault(monster.Name, 0);
             string healthText = "???";
 
-            // By default, color bar is grey
-            Color barColor = Color.DarkSlateGray;
-            // By default, color bar full
+            Color barColor;
             float barLengthPercent = 1f;
 
             TextProps textProps = new()
@@ -193,15 +234,11 @@ public sealed class ModEntry : Mod
             if (!_config.EnableXPNeeded || monsterKilledAmount + Game1.player.combatLevel.Value > Globals.EXPERIENCE_BASIC_STATS_LEVEL)
             {
                 useAlternateSprite = false;
+
                 float monsterHealthPercent = (float)health / (float)maxHealth;
-                barColor = monsterHealthPercent switch
-                {
-                    > 0.9f => ColourSchemes[_config.ColorScheme][0],
-                    > 0.65f => ColourSchemes[_config.ColorScheme][1],
-                    > 0.35f => ColourSchemes[_config.ColorScheme][2],
-                    > 0.15f => ColourSchemes[_config.ColorScheme][3],
-                    _ => ColourSchemes[_config.ColorScheme][4]
-                };
+
+                StageColors stageColors = GetColorSchemeOrDefault(_config.ColorScheme).GetBarColors(monsterHealthPercent);
+                barColor = stageColors.BarColor;
 
                 // If level system is deactivated or the full level is OK, we display the stats
                 if (!_config.EnableXPNeeded || monsterKilledAmount + Game1.player.combatLevel.Value * 4 > Globals.EXPERIENCE_FULL_STATS_LEVEL)
@@ -216,12 +253,14 @@ public sealed class ModEntry : Mod
                     {
                         healthText = $"{health:000}";
                         textProps.Font = Game1.tinyFont;
-                        textProps.Color = Color.DarkSlateGray;
+                        textProps.Color = stageColors.TextColor;
                         textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
                         textProps.BottomOffset = Globals.TEXT_DEFAUT_OFFSET;
                     }
                 }
             }
+            else
+                barColor = Color.DarkSlateGray;
 
             // Display the life bar
             Vector2 monsterLocalPosition = monster.getLocalPosition(Game1.viewport);
