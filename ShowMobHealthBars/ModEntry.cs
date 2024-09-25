@@ -219,7 +219,7 @@ namespace Thor.Stardew.Mods.HealthBars
                         }
                         else
                         {
-                            healthText = String.Format("{0:000}", health);
+                            healthText = $"{health:000}";
                             textProps.Font = Game1.tinyFont;
                             textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
                             textProps.BottomOffset = Globals.TEXT_DEFAUT_OFFSET;
