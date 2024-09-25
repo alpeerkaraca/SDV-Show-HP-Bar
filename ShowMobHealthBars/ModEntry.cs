@@ -236,7 +236,7 @@ namespace Thor.Stardew.Mods.HealthBars
                         new Rectangle(0, Globals.SPRITE_HEIGHT * Globals.SPRITE_INDEX_DEACTIVATED, lifebarBorder.Width, Globals.SPRITE_HEIGHT),
                         Color.White * 1f,
                         0f,
-                        new Vector2(lifebarBorder.Width / 2, Globals.SPRITE_HEIGHT / 2),
+                        new Vector2(lifebarBorder.Width / 2f, Globals.SPRITE_HEIGHT / 2f),
                         1f,
                         SpriteEffects.None,
                         0f);
@@ -250,14 +250,14 @@ namespace Thor.Stardew.Mods.HealthBars
                         new Rectangle(0, Globals.SPRITE_HEIGHT * Globals.SPRITE_INDEX_BACK, lifebarBorder.Width, Globals.SPRITE_HEIGHT),
                         Color.White * 1f,
                         0f,
-                        new Vector2(lifebarBorder.Width / 2, Globals.SPRITE_HEIGHT / 2),
+                        new Vector2(lifebarBorder.Width / 2f, Globals.SPRITE_HEIGHT / 2f),
                         1f,
                         SpriteEffects.None,
                         0f);
 
                     //Calculate size of the lifebox
                     Rectangle lifeBox = new Rectangle(0, 0, (int)((lifebarBorder.Width - Globals.LIFEBAR_MARGINS * 2) * barLengthPercent), Globals.SPRITE_HEIGHT - Globals.LIFEBAR_MARGINS * 2);
-                    Vector2 internalLifebarPos = new Vector2(lifebarCenterPos.X - lifebarBorder.Width / 2 + Globals.LIFEBAR_MARGINS, lifebarCenterPos.Y);
+                    Vector2 internalLifebarPos = new Vector2(lifebarCenterPos.X - lifebarBorder.Width / 2f + Globals.LIFEBAR_MARGINS, lifebarCenterPos.Y);
                     //Display life bar
                     Game1.spriteBatch.Draw(
                         _whitePixel,
