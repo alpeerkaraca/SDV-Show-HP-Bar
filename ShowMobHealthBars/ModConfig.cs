@@ -3,7 +3,7 @@
 /// <summary>
 /// Mod Configration class
 /// </summary>
-public class ModConfig
+public sealed class ModConfig
 {
     /// <summary>
     /// If true, the life counter needs XP + killcount of mobs to show the life level

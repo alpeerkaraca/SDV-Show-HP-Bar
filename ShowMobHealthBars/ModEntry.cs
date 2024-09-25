@@ -13,7 +13,7 @@ namespace ShowMobHealthBars;
 /// <summary>
 /// Main class of the mod
 /// </summary>
-public class ModEntry : Mod
+public sealed class ModEntry : Mod
 {
     /// <summary>
     /// Texture that is used to draw lifebar

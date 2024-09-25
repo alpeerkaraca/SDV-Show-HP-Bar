@@ -6,7 +6,7 @@ namespace ShowMobHealthBars;
 /// <summary>
 /// Properties of the life text display
 /// </summary>
-public class TextProps
+internal sealed class TextProps
 {
     /// <summary>
     /// Font to use on the text
