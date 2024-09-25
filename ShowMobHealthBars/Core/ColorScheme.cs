@@ -2,9 +2,19 @@
 
 namespace ShowMobHealthBars.Core;
 
+/// <summary>
+/// Holds the background and text color for a lifebar stage
+/// </summary>
 internal sealed class StageColors
 {
+    /// <summary>
+    /// Background color of the lifebar
+    /// </summary>
     public Color BarColor { get; }
+
+    /// <summary>
+    /// Text color of the lifebar
+    /// </summary>
     public Color TextColor { get; }
 
     public StageColors(Color barColor, Color textColor)
@@ -14,8 +24,14 @@ internal sealed class StageColors
     }
 }
 
+/// <summary>
+/// Holds the multiple stages of the lifebars color schemes
+/// </summary>
 internal sealed class ColorScheme
 {
+    /// <summary>
+    /// Represents the name used in the config menu
+    /// </summary>
     public string Name { get; }
 
     private readonly StageColors _stage1;
@@ -35,6 +51,9 @@ internal sealed class ColorScheme
         _stage5 = stage5;
     }
 
+    /// <summary>
+    /// Method to retrieve the lifebar <see cref="StageColors"/> based on <paramref name="monsterHealthPercent"/>
+    /// </summary>
     public StageColors GetBarColors(float monsterHealthPercent) => monsterHealthPercent switch
     {
         > 0.9f => _stage1,
