@@ -38,46 +38,46 @@ public sealed class ModEntry : Mod
     private static readonly ColorScheme[] ColorSchemes =
     {
         new("Classic",
-            new StageColors(Color.LawnGreen, Color.DarkSlateGray),
-            new StageColors(Color.YellowGreen, Color.DarkSlateGray),
-            new StageColors(Color.Gold, Color.DarkSlateGray),
-            new StageColors(Color.DarkOrange, Color.DarkSlateGray),
-            new StageColors(Color.Crimson, Color.DarkSlateGray)
+            (Color.LawnGreen, Color.DarkSlateGray),
+            (Color.YellowGreen, Color.DarkSlateGray),
+            (Color.Gold, Color.DarkSlateGray),
+            (Color.DarkOrange, Color.DarkSlateGray),
+            (Color.Crimson, Color.DarkSlateGray)
         ),
         new("Classic (inverted)",
-            new StageColors(Color.Crimson, Color.Ivory),
-            new StageColors(Color.DarkOrange, Color.Ivory),
-            new StageColors(Color.Gold, Color.DarkSlateGray),
-            new StageColors(Color.YellowGreen, Color.DarkSlateGray),
-            new StageColors(Color.LawnGreen, Color.DarkSlateGray)
+            (Color.Crimson, Color.Ivory),
+            (Color.DarkOrange, Color.Ivory),
+            (Color.Gold, Color.DarkSlateGray),
+            (Color.YellowGreen, Color.DarkSlateGray),
+            (Color.LawnGreen, Color.DarkSlateGray)
         ),
         new("Midnight",
-            new StageColors(Color.CornflowerBlue, Color.DarkSlateGray),
-            new StageColors(Color.RoyalBlue, Color.Ivory),
-            new StageColors(Color.Blue, Color.Ivory),
-            new StageColors(Color.DarkBlue, Color.DarkSlateGray),
-            new StageColors(Color.MidnightBlue, Color.DarkSlateGray)
+            (Color.CornflowerBlue, Color.DarkSlateGray),
+            (Color.RoyalBlue, Color.Ivory),
+            (Color.Blue, Color.Ivory),
+            (Color.DarkBlue, Color.DarkSlateGray),
+            (Color.MidnightBlue, Color.DarkSlateGray)
         ),
         new("Midnight (inverted)",
-            new StageColors(Color.MidnightBlue, Color.Ivory),
-            new StageColors(Color.DarkBlue, Color.Ivory),
-            new StageColors(Color.Blue, Color.Ivory),
-            new StageColors(Color.RoyalBlue, Color.DarkSlateGray),
-            new StageColors(Color.CornflowerBlue, Color.DarkSlateGray)
+            (Color.MidnightBlue, Color.Ivory),
+            (Color.DarkBlue, Color.Ivory),
+            (Color.Blue, Color.Ivory),
+            (Color.RoyalBlue, Color.DarkSlateGray),
+            (Color.CornflowerBlue, Color.DarkSlateGray)
         ),
         new("Rasmodius",
-            new StageColors(Color.DarkViolet, Color.Ivory),
-            new StageColors(Color.MediumOrchid, Color.DarkSlateGray),
-            new StageColors(Color.Orchid, Color.DarkSlateGray),
-            new StageColors(Color.MediumPurple, Color.DarkSlateGray),
-            new StageColors(Color.BlueViolet, Color.DarkSlateGray)
+            (Color.DarkViolet, Color.Ivory),
+            (Color.MediumOrchid, Color.DarkSlateGray),
+            (Color.Orchid, Color.DarkSlateGray),
+            (Color.MediumPurple, Color.DarkSlateGray),
+            (Color.BlueViolet, Color.DarkSlateGray)
         ),
         new("Rasmodius (inverted)",
-            new StageColors(Color.BlueViolet, Color.Ivory),
-            new StageColors(Color.MediumPurple, Color.Ivory),
-            new StageColors(Color.Orchid, Color.DarkSlateGray),
-            new StageColors(Color.MediumOrchid, Color.DarkSlateGray),
-            new StageColors(Color.DarkViolet, Color.DarkSlateGray)
+            (Color.BlueViolet, Color.Ivory),
+            (Color.MediumPurple, Color.Ivory),
+            (Color.Orchid, Color.DarkSlateGray),
+            (Color.MediumOrchid, Color.DarkSlateGray),
+            (Color.DarkViolet, Color.DarkSlateGray)
         ),
     };
 
@@ -231,8 +231,8 @@ public sealed class ModEntry : Mod
 
                 float monsterHealthPercent = (float)health / (float)maxHealth;
 
-                StageColors stageColors = GetColorSchemeOrDefault(_config.ColorScheme).GetBarColors(monsterHealthPercent);
-                barColor = stageColors.BarColor;
+                (Color BarColor, Color TextColor) colorSchemeColors = GetColorSchemeOrDefault(_config.ColorScheme).GetBarColors(monsterHealthPercent);
+                barColor = colorSchemeColors.BarColor;
 
                 // If level system is deactivated or the full level is OK, we display the stats
                 if (!_config.EnableXPNeeded || monsterKilledAmount + Game1.player.combatLevel.Value * 4 > Globals.EXPERIENCE_FULL_STATS_LEVEL)
@@ -247,7 +247,7 @@ public sealed class ModEntry : Mod
                     {
                         healthText = $"{health:000}";
                         textProps.Font = Game1.tinyFont;
-                        textProps.Color = stageColors.TextColor;
+                        textProps.Color = colorSchemeColors.TextColor;
                         textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
                         textProps.BottomOffset = Globals.TEXT_DEFAUT_OFFSET;
                     }

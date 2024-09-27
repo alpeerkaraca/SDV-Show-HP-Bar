@@ -1,65 +1,56 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace ShowMobHealthBars.Core;
-
-/// <summary>
-/// Holds the background and text color for a lifebar stage
-/// </summary>
-internal sealed class StageColors
-{
-    /// <summary>
-    /// Background color of the lifebar
-    /// </summary>
-    public Color BarColor { get; }
-
-    /// <summary>
-    /// Text color of the lifebar
-    /// </summary>
-    public Color TextColor { get; }
-
-    public StageColors(Color barColor, Color textColor)
-    {
-        BarColor = barColor;
-        TextColor = textColor;
-    }
-}
 
 /// <summary>
 /// Holds the multiple stages of the lifebars color schemes
 /// </summary>
 internal sealed class ColorScheme
 {
+    private readonly (Color BarColor, Color TextColor)[] _colors;
+
     /// <summary>
     /// Represents the name used in the config menu
     /// </summary>
     public string Name { get; }
 
-    private readonly StageColors _stage1;
-    private readonly StageColors _stage2;
-    private readonly StageColors _stage3;
-    private readonly StageColors _stage4;
-    private readonly StageColors _stage5;
-
-    public ColorScheme(string name, StageColors stage1, StageColors stage2, StageColors stage3, StageColors stage4, StageColors stage5)
+    public ColorScheme(string name, (Color BarColor, Color TextColor) colors1,
+        (Color BarColor, Color TextColor) colors2, params (Color BarColor, Color TextColor)[] moreColors)
     {
+        // Inverse colors to account the lerp direction and avoid "inverting" the monsterHealthPercent range
+        _colors = new[] { colors1, colors2, }.Concat(moreColors).Reverse().ToArray();
         Name = name;
-
-        _stage1 = stage1;
-        _stage2 = stage2;
-        _stage3 = stage3;
-        _stage4 = stage4;
-        _stage5 = stage5;
     }
 
     /// <summary>
-    /// Method to retrieve the lifebar <see cref="StageColors"/> based on <paramref name="monsterHealthPercent"/>
+    /// Method to retrieve the lifebar colors based on <paramref name="monsterHealthPercent"/>
     /// </summary>
-    public StageColors GetBarColors(float monsterHealthPercent) => monsterHealthPercent switch
+    public (Color BarColor, Color TextColor) GetBarColors(float monsterHealthPercent)
     {
-        > 0.9f => _stage1,
-        > 0.65f => _stage2,
-        > 0.35f => _stage3,
-        > 0.15f => _stage4,
-        _ => _stage5
-    };
+        if (_colors.Length == 2)
+            return Lerp(_colors[0], _colors[1], monsterHealthPercent);
+
+        switch (monsterHealthPercent)
+        {
+            case <= 0:
+                return _colors[0];
+            case >= 1:
+                return _colors[^1];
+        }
+
+        float scaledAmount = monsterHealthPercent * (_colors.Length - 1);
+        int index = (int)Math.Floor(scaledAmount);
+        float localAmount = scaledAmount - index;
+
+        return Lerp(_colors[index], _colors[index + 1], localAmount);
+    }
+
+    private static (Color BarColor, Color TextColor) Lerp((Color BarColor, Color TextColor) colors1,
+        (Color BarColor, Color TextColor) colors2, float amount)
+        => (
+            Color.Lerp(colors1.BarColor, colors2.BarColor, amount),
+            Color.Lerp(colors1.TextColor, colors2.TextColor, amount)
+        );
 }
