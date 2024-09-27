@@ -151,17 +151,11 @@ public sealed class ModEntry : Mod
     /// </summary>
     private void EnsureCorrectConfig()
     {
-        bool needUpdateConfig = false;
-        if (_config.ColorScheme >= ColorSchemes.Length || _config.ColorScheme < 0)
-        {
-            _config.ColorScheme = 0;
-            needUpdateConfig = true;
-        }
+        if (ColorSchemes.Length > _config.ColorScheme && _config.ColorScheme >= 0)
+            return;
 
-        if (needUpdateConfig)
-        {
-            Helper.WriteConfig(_config);
-        }
+        _config.ColorScheme = 0;
+        Helper.WriteConfig(_config);
     }
 
     /// <summary>
