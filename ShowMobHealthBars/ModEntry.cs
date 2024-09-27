@@ -165,8 +165,8 @@ public sealed class ModEntry : Mod
     /// <param name="e">Event parameters</param>
     private void RenderLifeBars(object sender, RenderedWorldEventArgs e)
     {
-
-        if (!Context.IsWorldReady || Game1.currentLocation == null || Game1.gameMode == 11 || Game1.currentMinigame != null || Game1.showingEndOfNightStuff || Game1.gameMode == 6 || Game1.gameMode == 0 || Game1.activeClickableMenu != null) return;
+        if (!Context.IsWorldReady || Game1.currentLocation == null || Game1.gameMode == 11 || Game1.currentMinigame != null || Game1.showingEndOfNightStuff || Game1.gameMode == 6 || Game1.gameMode == 0 || Game1.activeClickableMenu != null)
+            return;
 
         if (_whitePixel == null)
         {
@@ -179,15 +179,11 @@ public sealed class ModEntry : Mod
         {
             // We only care about monsters
             if (character is not Monster monster)
-            {
                 continue;
-            }
 
             // If monster is not visible, next
             if (monster.IsInvisible || !Utility.isOnScreen(monster.position.Value, 3 * Game1.tileSize))
-            {
                 continue;
-            }
 
             switch (monster)
             {
@@ -202,10 +198,10 @@ public sealed class ModEntry : Mod
 
             // Get all infos about the monster
             int health = monster.Health;
-            int maxHealth = monster.MaxHealth;
-            if (health > maxHealth) maxHealth = health;
-            if (_config.HideFullLifeBar && maxHealth == health) continue;
+            int maxHealth = Math.Max(monster.Health, monster.MaxHealth);
 
+            if (_config.HideFullLifeBar && maxHealth == health)
+                continue;
 
             // If monster has already been killed once by player, we get the number of kills, else it's 0
             int monsterKilledAmount = Game1.stats.specificMonstersKilled.GetValueOrDefault(monster.Name, 0);
@@ -238,12 +234,9 @@ public sealed class ModEntry : Mod
                 if (!_config.EnableXPNeeded || monsterKilledAmount + Game1.player.combatLevel.Value * 4 > Globals.EXPERIENCE_FULL_STATS_LEVEL)
                 {
                     barLengthPercent = monsterHealthPercent;
+
                     // If it's a very strong monster, we hide the life counter
-                    if (_config.EnableXPNeeded && monster.Health > 999)
-                    {
-                        healthText = "!!!";
-                    }
-                    else
+                    if (!_config.EnableXPNeeded || monster.Health <= 999)
                     {
                         healthText = $"{health:000}";
                         textProps.Font = Game1.tinyFont;
@@ -251,6 +244,8 @@ public sealed class ModEntry : Mod
                         textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
                         textProps.BottomOffset = Globals.TEXT_DEFAUT_OFFSET;
                     }
+                    else
+                        healthText = "!!!";
                 }
             }
             else
