@@ -24,6 +24,12 @@ public sealed class ModConfig
     public bool HideFullLifeBar { get; set; }
 
     /// <summary>
+    /// If true, the life is will be padded with leading zero to always be three digits long
+    /// If false, the life is shown without leading zeros
+    /// </summary>
+    public bool PadHealth { get; set; }
+
+    /// <summary>
     /// Allow selecting the color scheme of the life bar
     /// </summary>
     public int ColorScheme { get; set; }
@@ -37,5 +43,6 @@ public sealed class ModConfig
         ColorScheme = 0;
         HideTextInfo = false;
         HideFullLifeBar = false;
+        PadHealth = false;
     }
 }

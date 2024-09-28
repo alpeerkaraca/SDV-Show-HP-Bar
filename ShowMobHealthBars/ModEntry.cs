@@ -118,6 +118,13 @@ public sealed class ModEntry : Mod
             getValue: () => _config.HideFullLifeBar,
             setValue: value => _config.HideFullLifeBar = value
         );
+        configMenu.AddBoolOption(
+            mod: ModManifest,
+            name: () => Helper.Translation.Get("ehb.config.padHealth.title"),
+            tooltip: () => Helper.Translation.Get("ehb.config.padHealth.desc"),
+            getValue: () => _config.PadHealth,
+            setValue: value => _config.PadHealth = value
+        );
         configMenu.AddTextOption(
             mod: ModManifest,
             name: () => Helper.Translation.Get("ehb.config.colorScheme.title"),
@@ -245,7 +252,7 @@ public sealed class ModEntry : Mod
                     // If it's a very strong monster, we hide the life counter
                     if (!_config.EnableXPNeeded || monster.Health <= 999)
                     {
-                        healthText = $"{health:000}";
+                        healthText = _config.PadHealth ? $"{health:000}" : health.ToString();
                         textProps.Font = Game1.tinyFont;
                         textProps.Color = colorSchemeColors.TextColor;
                         textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
