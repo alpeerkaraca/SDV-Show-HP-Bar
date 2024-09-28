@@ -195,10 +195,17 @@ public sealed class ModEntry : Mod
                     continue;
             }
 
-
             // Get all infos about the monster
             int health = monster.Health;
-            int maxHealth = Math.Max(monster.Health, monster.MaxHealth);
+            int maxHealth;
+
+            if (!monster.modData.TryGetValue(nameof(monster.MaxHealth), out string maxHealthValue))
+            {
+                maxHealth = Math.Max(monster.Health, monster.MaxHealth);
+                monster.modData[nameof(monster.MaxHealth)] = maxHealth.ToString();
+            }
+            else
+                maxHealth = Convert.ToInt32(maxHealthValue);
 
             if (_config.HideFullLifeBar && maxHealth == health)
                 continue;
