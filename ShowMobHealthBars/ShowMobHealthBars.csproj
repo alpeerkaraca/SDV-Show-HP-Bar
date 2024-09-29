@@ -1,31 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <ModFolderName>MobHealthBars</ModFolderName>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <AssemblyTitle>alpeerkaraca.ShowMobHealthBars</AssemblyTitle>
-    <Product>alpeerkaraca.ShowMobHealthBars</Product>
-    <Copyright>Copyright ©  2024</Copyright>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <ItemGroup>
-    <Content Include="assets\SDV_lifebar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.2.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-  </ItemGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties manifest_1json__JSONSchema="" />
-    </VisualStudio>
-  </ProjectExtensions>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
+        <ModFolderName>MobHealthBars</ModFolderName>
+        <AssemblyTitle>alpeerkaraca.ShowMobHealthBars</AssemblyTitle>
+        <Product>alpeerkaraca.ShowMobHealthBars</Product>
+        <Copyright>Copyright © 2024</Copyright>
+        <Version>0.1.0</Version>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="assets\SDV_lifebar.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0"/>
+        <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.2.0"/>
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0"/>
+    </ItemGroup>
+
+    <ProjectExtensions>
+        <VisualStudio>
+            <UserProperties manifest_1json__JSONSchema=""/>
+        </VisualStudio>
+    </ProjectExtensions>
+
 </Project>
