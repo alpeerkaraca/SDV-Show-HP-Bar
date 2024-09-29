@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -23,12 +24,15 @@ internal static class LifeBarRenderer
     /// </summary>
     private static Texture2D _whitePixel;
 
+    private static readonly Dictionary<Monster, int> _maxHealthCache = new();
+
     public static void Initialize(IModHelper helper, ModConfig config)
     {
         _config = config;
         _lifebarBorder = helper.ModContent.Load<Texture2D>("assets/SDV_lifebar.png");
 
         helper.Events.Display.RenderedWorld += RenderLifeBars;
+        helper.Events.World.NpcListChanged += UpdateMaxHealthCache;
     }
 
     /// <summary>
@@ -47,13 +51,10 @@ internal static class LifeBarRenderer
             _whitePixel.SetData(new[] { Color.White });
         }
 
-        foreach (NPC character in Game1.currentLocation.characters)
-        {
-            if (character is not Monster monster)
-                continue;
+        IEnumerable<Monster> monsters = Game1.currentLocation.characters.OfType<Monster>();
 
+        foreach (Monster monster in monsters)
             RenderLifeBar(monster);
-        }
     }
 
     private static void RenderLifeBar(Monster monster)
@@ -61,9 +62,9 @@ internal static class LifeBarRenderer
         if (!CanShowLifeBar(monster))
             return;
 
-        (int health, int maxHealth) = ResolveHealth(monster);
+        int maxHealth = ResolveMaxHealth(monster);
 
-        if (_config.HideFullLifeBar && maxHealth == health)
+        if (_config.HideFullLifeBar && maxHealth == monster.Health)
             return;
 
         int monsterKilledAmount = Game1.stats.specificMonstersKilled.GetValueOrDefault(monster.Name, 0);
@@ -87,7 +88,7 @@ internal static class LifeBarRenderer
         {
             useAlternateSprite = false;
 
-            float monsterHealthPercent = (float)health / (float)maxHealth;
+            float monsterHealthPercent = (float)monster.Health / (float)maxHealth;
 
             (Color BarColor, Color TextColor) colorSchemeColors = ColorSchemes.GetSchemeOrDefault(_config.ColorScheme).GetBarColors(monsterHealthPercent);
             barColor = colorSchemeColors.BarColor;
@@ -100,7 +101,7 @@ internal static class LifeBarRenderer
                 // If it's a very strong monster, we hide the life counter
                 if (!_config.EnableXPNeeded || monster.Health <= 999)
                 {
-                    healthText = _config.PadHealth ? $"{health:000}" : health.ToString();
+                    healthText = _config.PadHealth ? $"{monster.Health:000}" : monster.Health.ToString();
                     textProps.Font = Game1.tinyFont;
                     textProps.Color = colorSchemeColors.TextColor;
                     textProps.Scale = Globals.TEXT_DEFAUT_SCALE_LEVEL;
@@ -200,20 +201,12 @@ internal static class LifeBarRenderer
         }
     }
 
-    private static (int health, int maxHealth) ResolveHealth(Monster monster)
+    private static int ResolveMaxHealth(Monster monster)
     {
-        int health = monster.Health;
-        int maxHealth;
+        if (!_maxHealthCache.TryGetValue(monster, out int maxHealth))
+            _maxHealthCache[monster] = maxHealth = Math.Max(monster.Health, monster.MaxHealth);
 
-        if (!monster.modData.TryGetValue(nameof(monster.MaxHealth), out string maxHealthValue))
-        {
-            maxHealth = Math.Max(monster.Health, monster.MaxHealth);
-            monster.modData[nameof(monster.MaxHealth)] = maxHealth.ToString();
-        }
-        else
-            maxHealth = Convert.ToInt32(maxHealthValue);
-
-        return (health, maxHealth);
+        return maxHealth;
     }
 
     private static bool CanShowLifeBar(Monster monster)
@@ -232,5 +225,13 @@ internal static class LifeBarRenderer
         }
 
         return true;
+    }
+
+    private static void UpdateMaxHealthCache(object sender, NpcListChangedEventArgs e)
+    {
+        IEnumerable<Monster> monsters = e.Removed.OfType<Monster>();
+
+        foreach (Monster monster in monsters)
+            _maxHealthCache.Remove(monster);
     }
 }
