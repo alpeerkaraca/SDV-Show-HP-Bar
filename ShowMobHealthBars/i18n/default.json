@@ -8,6 +8,9 @@
     "ehb.config.hideFullLifeBar.title": "Hide life bar when full life",
     "ehb.config.hideFullLifeBar.desc": "When activated, the life bar is hidden if ennemy has full life (life bar can spoil presence of hidden mobs, this option help you to prevent this)",
 
+    "ehb.config.padHealth.title": "Health always three digits long",
+    "ehb.config.padHealth.desc": "When activated, the health will always be filled with leading zeros to be always three digits long",
+
     "ehb.config.colorScheme.title": "Select color scheme",
     "ehb.config.colorScheme.desc": "Allow you to select an alternate color scheme"
 }
