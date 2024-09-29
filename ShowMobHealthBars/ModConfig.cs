@@ -3,12 +3,13 @@
 /// <summary>
 /// Mod Configration class
 /// </summary>
-public sealed class ModConfig
+internal sealed class ModConfig
 {
     /// <summary>
     /// If true, the life counter needs XP + killcount of mobs to show the life level
     /// If false, always show the life level
     /// </summary>
+    // ReSharper disable once InconsistentNaming
     public bool EnableXPNeeded { get; set; }
 
     /// <summary>
