@@ -223,6 +223,7 @@ internal static class LifeBarRenderer
 
         switch (monster)
         {
+            case Spiker:
             case RockCrab when monster.Sprite.CurrentFrame % 4 == 0:
             case RockGolem when monster.Health == monster.MaxHealth:
             case Bug bug when bug.isArmoredBug.Value:
