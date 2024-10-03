@@ -29,9 +29,6 @@ internal sealed class ColorScheme
     /// </summary>
     public (Color BarColor, Color TextColor) GetBarColors(float monsterHealthPercent)
     {
-        if (_colors.Length == 2)
-            return Lerp(_colors[0], _colors[1], monsterHealthPercent);
-
         switch (monsterHealthPercent)
         {
             case <= 0:
@@ -39,6 +36,9 @@ internal sealed class ColorScheme
             case >= 1:
                 return _colors[^1];
         }
+
+        if (_colors.Length == 2)
+            return Lerp(_colors[0], _colors[1], monsterHealthPercent);
 
         float scaledAmount = monsterHealthPercent * (_colors.Length - 1);
         int index = (int)Math.Floor(scaledAmount);
